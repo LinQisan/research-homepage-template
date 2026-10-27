@@ -23,7 +23,10 @@ class ConversionTests(unittest.TestCase):
             executable = Path(temporary) / "Program Files/LibreOffice/program/soffice.com"
             executable.parent.mkdir(parents=True)
             executable.touch()
-            with patch.dict(os.environ, {"ProgramFiles": str(Path(temporary) / "Program Files")}, clear=True):
+            # Keep USERPROFILE etc.: Path.home() fails on Windows without them.
+            with patch.dict(os.environ, {"ProgramFiles": str(Path(temporary) / "Program Files")}):
+                for key in ("SOFFICE", "ProgramFiles(x86)", "LOCALAPPDATA"):
+                    os.environ.pop(key, None)
                 with patch.object(slides.shutil, "which", side_effect=lambda name: str(executable) if name == str(executable) else None):
                     self.assertEqual(slides.find_libreoffice(), str(executable))
 

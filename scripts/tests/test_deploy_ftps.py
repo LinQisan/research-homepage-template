@@ -83,9 +83,12 @@ class DeploymentTests(unittest.TestCase):
         self.dist = self.root / "dist"
         self.dist.mkdir()
         (self.dist / "index.html").write_bytes(b"new homepage")
-        self.env = patch.dict(os.environ, {}, clear=True)
+        # Remove only deployment settings; Windows needs SYSTEMROOT etc. for SSL.
+        self.env = patch.dict(os.environ)
         self.env.start()
         self.addCleanup(self.env.stop)
+        for key in (*deploy.REQUIRED, "FTPS_PORT", "GITHUB_STEP_SUMMARY"):
+            os.environ.pop(key, None)
         self.output = io.StringIO()
         self.stdout = redirect_stdout(self.output)
         self.stdout.__enter__()
