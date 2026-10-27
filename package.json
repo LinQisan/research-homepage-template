@@ -1,0 +1,19 @@
+{
+  "name": "research-homepage",
+  "version": "1.0.0",
+  "private": true,
+  "description": "研究紹介サイトのテンプレート（静的サイトジェネレーター・依存パッケージなし）",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node src/build.js",
+    "dev": "node scripts/dev.js",
+    "preview": "node scripts/serve.js",
+    "preview:sub": "node scripts/serve.js --base /~lab/site/",
+    "check": "node scripts/check-links.js",
+    "check:remote": "node scripts/check-links.js --remote",
+    "slides": "node scripts/export-slides.mjs"
+  }
+}

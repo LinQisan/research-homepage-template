@@ -1,0 +1,2 @@
+# Optional: only needed when regenerating slide images, not for build/deploy.
+PyMuPDF>=1.24.3,<2

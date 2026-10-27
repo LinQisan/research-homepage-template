@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360">
+  <style>
+    .ex-box { fill: var(--surface, #fff); stroke: var(--line-strong, #c9c6bd); stroke-width: 1.5; }
+    .ex-hot { stroke: var(--accent, #2f6f5e); stroke-width: 2; }
+    .ex-t { font: 600 20px system-ui, sans-serif; fill: var(--text, #1c1d1f); text-anchor: middle; }
+    .ex-s { font: 14px system-ui, sans-serif; fill: var(--muted, #6b6a66); text-anchor: middle; }
+    .ex-a { stroke: var(--muted, #6b6a66); stroke-width: 2; fill: none; marker-end: url(#arrow); }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0 10 5 0 10z" fill="var(--muted, #6b6a66)"/>
+    </marker>
+  </defs>
+  <rect class="ex-box" x="40" y="120" width="190" height="120" rx="14"/>
+  <text class="ex-t" x="135" y="175">データ</text>
+  <text class="ex-s" x="135" y="202">集める・整える</text>
+  <rect class="ex-box ex-hot" x="305" y="120" width="190" height="120" rx="14"/>
+  <text class="ex-t" x="400" y="175">分析・試作</text>
+  <text class="ex-s" x="400" y="202">研究の中心</text>
+  <rect class="ex-box" x="570" y="120" width="190" height="120" rx="14"/>
+  <text class="ex-t" x="665" y="175">ふり返り</text>
+  <text class="ex-s" x="665" y="202">結果をまとめる</text>
+  <path class="ex-a" d="M232 180h68"/>
+  <path class="ex-a" d="M497 180h68"/>
+</svg>

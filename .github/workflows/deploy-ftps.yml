@@ -1,0 +1,65 @@
+name: Build and deploy via FTPS
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Serialize deployments so two uploads cannot overwrite each other.
+concurrency:
+  group: ftps-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      TZ: Asia/Tokyo
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      # No npm install / pip install: both scripts use standard libraries only.
+      - name: Build static site
+        run: npm run build
+
+      - name: Check internal links
+        run: npm run check
+
+      - name: Test deployment script
+        run: python3 -m unittest discover -s scripts/tests -v
+
+      - name: Preview upload without connecting
+        run: python3 scripts/deploy-ftps.py --dry-run
+
+      - name: Deploy dist contents via FTPS
+        # Pull requests and manually selected non-main branches only run checks.
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          # Leave these Secrets unset until the school provides connection details.
+          FTPS_HOST: ${{ secrets.FTPS_HOST }}
+          FTPS_USERNAME: ${{ secrets.FTPS_USERNAME }}
+          FTPS_PASSWORD: ${{ secrets.FTPS_PASSWORD }}
+          FTPS_REMOTE_DIR: ${{ secrets.FTPS_REMOTE_DIR }}
+          FTPS_PORT: ${{ vars.FTPS_PORT }}
+        run: python3 scripts/deploy-ftps.py --skip-if-unconfigured
